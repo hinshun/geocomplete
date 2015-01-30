@@ -423,7 +423,8 @@
       var data = {},
         geometry = result.geometry,
         viewport = geometry.viewport,
-        bounds = geometry.bounds;
+        bounds = geometry.bounds,
+        attribute = this.options.detailsAttribute;
 
       // Create a simplified version of the address components.
       $.each(result.address_components, function(index, object){
@@ -455,13 +456,14 @@
       $.each(this.details, $.proxy(function(key, $detail){
         $detail = $detail.first();
 
-        // build the value for single or mutliple address component types
+        // build the value for single or multiple address component types
         var value;
         var count = 0;
-        var comps = $detail.attr('data-geo');
+        var comps = $detail.attr(attribute);
         if(comps !== undefined){
           $.each(comps.replace(/\s+/g, ' ').split(" "), function(){
             var current = data[this.toString()];
+            if (current === undefined) { return true; }
             if(count++ === 0)
               value = current;
             else
@@ -471,7 +473,6 @@
         else
           value = data[key];
 
-      // Set the values for all details.
         this.setDetail($detail, value);
       }, this));
 
