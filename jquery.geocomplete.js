@@ -496,12 +496,13 @@
           $element.find("option").filter(function(){
             return ( ($(this).val() == value) || ($(this).text() == value) )
           }).prop('selected', true);
-        }
-        else
+        } else {
           $element.val(value);
-      }  else {
+        }
+      } else {
         $element.text(value);
       }
+      $element.trigger('change');
     },
 
     // Fire the "geocode:dragged" event and pass the new position.
